@@ -1,0 +1,140 @@
+<div class="flex justify-start m-4">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        [routerLink]="['/']">
+        Volver
+    </button>
+</div>
+
+<div class="max-w-md mx-auto p-4">
+
+    <div *ngIf="!customer.id else elseTitle" class="text-xl font-semibold mb-4">Registrar cliente</div>
+
+    <ng-template #elseTitle>
+        <div class="text-xl font-semibold mb-4">Editar cliente</div>
+    </ng-template>
+
+    <div *ngIf="error">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ error }}</span>
+        </div>
+    </div>
+
+    <div>
+
+        <form #customerForm="ngForm" class="space-y-4">
+
+            <div>
+
+                <label for="name" class="block font-semibold">Nombre</label>
+
+                <div>
+
+                    <input type="text" id="name" name="name" placeholder="Ingrese aquí el nombre"
+                        [(ngModel)]="customer.name" required minlength="4" #name="ngModel"
+                        class="border border-gray-300 rounded-md p-2 w-full">
+
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-red-500 text-sm mt-1">
+                        <div *ngIf="name.errors['required']">El nombre es requerido</div>
+                        <div *ngIf="name.errors['minlength']">El nombre debe tener al menos 4 caracteres</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <label for="lastname" class="block font-semibold">Apellido</label>
+
+                <div>
+
+                    <input type="text" id="lastname" name="lastname" placeholder="Ingrese aquí el apellido"
+                        [(ngModel)]="customer.lastname" required minlength="4" #lastname="ngModel"
+                        class="border border-gray-300 rounded-md p-2 w-full">
+
+                    <div *ngIf="lastname.invalid && (lastname.dirty || lastname.touched)"
+                        class="text-red-500 text-sm mt-1">
+                        <div *ngIf="lastname.errors['required']">El apellido es requerido</div>
+                        <div *ngIf="lastname.errors['minlength']">El apellido debe tener al menos 4 caracteres</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <label for="email" class="block font-semibold">Correo</label>
+
+                <div>
+
+                    <input type="email" id="email" name="email" placeholder="Ingrese aquí el email"
+                        [(ngModel)]="customer.email" required #email="ngModel"
+                        class="border border-gray-300 rounded-md p-2 w-full">
+
+                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-red-500 text-sm mt-1">
+                        <div *ngIf="email.errors['required']">El correo es requerido</div>
+                        <div *ngIf="email.errors['email']">El correo no es válido</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <label for="region" class="block font-semibold">Región</label>
+
+                <div>
+
+                    <select id="region" name="region" [(ngModel)]="customer.region.id" required #region="ngModel"
+                        class="border border-gray-300 rounded-md p-2 w-full">
+
+                        <option *ngFor="let region of regions" [value]="region.id" [disabled]="region.id === null">{{
+                            region.name }}</option>
+
+                    </select>
+
+                    <div *ngIf="region.invalid && (region.dirty || region.touched)" class="text-red-500 text-sm mt-1">
+                        <div *ngIf="region.errors['required'] && !customer.region.id">La región es requerida</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div *ngIf="customer.id">
+
+                <label for="file">Foto de perfil</label>
+
+                <input type="file" id="file" name="file" accept="image/png, image/jpeg, image/jpg, image/wepb"
+                    (change)="onFileSelected($event)" class="border border-gray-300 rounded-md p-2 w-full">
+
+            </div>
+
+            <div>
+
+                <div>
+
+                    <button role="button" *ngIf="!customer.id else elseBlock" (click)="createCustomer()"
+                        [disabled]="!customerForm.form.valid"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Registrar
+                    </button>
+
+                    <ng-template #elseBlock>
+                        <button role="button" (click)="updateCustomer()" [disabled]="!customerForm.form.valid"
+                            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                            Editar
+                        </button>
+                    </ng-template>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
